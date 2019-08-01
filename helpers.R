@@ -1,6 +1,109 @@
-isotope <- readRDS(file = "./thesis/data/isotope.RDS")
-dat <- readRDS(file = "./thesis/data/dat.RDS")
+library(shiny)
+isotope <- readRDS(file = "~/Google Drive/R/shiny/thesis/data/isotope.RDS")
+dat <- readRDS(file = "~/Google Drive/R/shiny/thesis/data/dat.RDS")
 dat_wt <- dat[dat$atoms != "", c("atoms", "weight")]
+
+chemDF <- data.frame(
+    "atoms" = c("C", "C", "H", "H", "N", "N", "O", "Si", "Fe", "S"), 
+    "supscr" = c("{^{13}","", "{^{2}", "", "{^{15}", "", "", "", "", ""),
+    "type" = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7),
+    "ind_tr" = c(1, 2, 1, 2, 1, 2, 2, 2, 2, 2))
+
+atoms = list();
+atoms[["unlabeled"]] = c(
+    "C"  = "carbon",
+    "H"  = "hydrogen",
+    "N"  = "nitrogen",
+    "O"  = "oxygen",
+    "Si" = "silicon",
+    "Fe" = "iron",
+    "S"  = "sulfur" 
+)
+atoms[["labeled"]] = c(
+    "C1" = "carbon1",
+    "C2" = "carbon2",
+    "H1" = "hydrogen1",
+    "H2" = "hydrogen2",
+    "N1" = "nitrogen1",
+    "N2" = "nitrogen2"
+)
+
+extract_atoms <- function(input, type = "unlabeled") {
+    out = list();
+    tmp = atoms[[type]]
+    for (nam in names(tmp)) {
+        out[[nam]] = input[[tmp[nam]]]
+    }
+    if (type == "labeled") {
+        out[["C"]] = unlist(out[c("C1", "C2")], use.names = F)
+        out[["H"]] = unlist(out[c("H1", "H2")], use.names = F)
+        out[["N"]] = unlist(out[c("N1", "N2")], use.names = F)
+        out = out[c("C", "H", "N")]
+    }
+    return(sub_iso_list(out))
+}
+
+numInput = function(inputId, value, max, min = 0, step = NA, label = NULL, width = NULL) {
+    allArgs = formals(numInput)
+    thisCall = as.list(match.call())[-1]
+    allArgs[names(thisCall)] <-  thisCall
+    do.call(numericInput, allArgs)
+}
+
+
+prepareDataChemFormula <- function(arguments, tracers) {
+    nn_arg      <- names(arguments)
+    nn_tr       <- names(tracers)
+    n_atoms_arg <- unlist(lapply(arguments, '[', 1), use.names = FALSE)
+    n_atoms_tr  <- unlist(lapply(tracers,   '[', 1), use.names = FALSE)
+    index_tr    <- with(chemDF, which((ind_tr == 1) & (atoms %in% nn_tr)))
+    index_arg   <- with(chemDF, which((ind_tr == 2) & (atoms %in% nn_arg)))
+    temp_tr <- chemDF[index_tr, ]
+    temp_tr[["n_atoms"]] <- n_atoms_tr
+    temp_arg <- chemDF[index_arg, ]
+    temp_arg[["n_atoms"]] <- n_atoms_arg
+    temp     <- rbind(temp_tr, temp_arg)
+    temp <- temp[order(temp$type, temp$ind_tr), ]
+    temp[["chemm"]] <- NA
+    return(temp)
+}
+
+createChemString <- function(data) {
+    for (i in 1:nrow(data)) {
+        if (data$ind_tr[i] == 1) {
+            data[i, "chemm"] <- paste0("(", data$supscr[i], data$atoms[i], "_", "{",data$n_atoms[i], "}", ")", "}", collapse = '')
+        } else {
+            nnn <- ""
+            if (data$n_atoms[i] > 1) nnn <- data$n_atoms[i]
+            data[i, "chemm"] <- paste0(data$atoms[i], "_", "{",nnn, "}", collapse = '')
+        }
+    }
+    paste0("$$", paste0(data[["chemm"]], collapse = ''), "$$", collapse = '')
+}
+
+
+image_size <- function(x) {
+    if (x < 5) {
+        hh <- 400;
+        ww <- 400;
+    } else if (x < 15) {
+        hh <- 500;
+        ww <- 500;
+    } else if (x < 30) {
+        ww <- 600;
+        hh <- 600;
+    } else if (x < 50) {
+        ww <- 700;
+        hh <- 700;
+    } else if (x < 60) {
+        ww <- 800;
+        hh <- 800;
+    } else {
+        ww <- 1000
+        hh <- 800
+    }
+    list("hh" = hh, "ww" = ww)
+}
 
 fft_unit <- function(x, n_atoms) {
     if (n_atoms == 1) return(x)
@@ -31,10 +134,10 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
         }
         ind_wt <- dat_wt[["atoms"]] %in% nn_tracer
         base_wt_tracer <- sum(dat_wt[["weight"]][ind_wt] * n_atoms_tr)
-        } else {
-            prob_tracer <- NULL
-            base_wt_tracer <- NULL
-        }
+    } else {
+        prob_tracer <- NULL
+        base_wt_tracer <- NULL
+    }
     
     arguments_exist <- !is.null(arguments)
     if (arguments_exist) {
@@ -48,10 +151,10 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
             n_atoms_unlab[i] = k <- arguments[[i]][1]
             if (n_species[[i]] == 2) {
                 probs_unlab[[i]] <- dbinom(0L:k, k, probs_unlab[[i]][2])
-                } else if (n_species[[i]] > 2) {
-                    probs_unlab[[i]] <- fft_unit(probs_unlab[[i]], k)
-                }
+            } else if (n_species[[i]] > 2) {
+                probs_unlab[[i]] <- fft_unit(probs_unlab[[i]], k)
             }
+        }
         ind_wt <- dat_wt[["atoms"]] %in% nn_unlab
         base_wt <- sum(dat_wt[["weight"]][ind_wt] * n_atoms_unlab)
     } else {
@@ -59,9 +162,9 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
         base_wt <- NULL
     }
     
-       probs <- c(probs_unlab, prob_tracer)
-       base_wt <- sum(c(base_wt, base_wt_tracer))
-
+    probs <- c(probs_unlab, prob_tracer)
+    base_wt <- sum(c(base_wt, base_wt_tracer))
+    
     list_len <- length(probs)
     # if (length(probs) == 1) return(probs[[1]])
     list_len <- length(probs)
@@ -89,7 +192,7 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
     }
     mass_number <- base_wt + 0:(length(probs) - 1)
     final <- matrix(c(mass_number, probs), ncol = 2,
-            dimnames = list(c(paste0("M",0:(length(probs) - 1))), c("Mass", "Probability")))
+        dimnames = list(c(paste0("M",0:(length(probs) - 1))), c("Mass", "Probability")))
     final[final[,2] < 3e-16, 2] <- 0
     highest_peak <- max(final[, 2])
     limit <- highest_peak * detect_limit
@@ -101,8 +204,8 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
     final <- cbind(final, Normalized)
     return(final)
 }
-        
-        
+
+
 sub_iso_list <- function(alist) {
     len <- length(alist)
     index <- rep(FALSE, len)
