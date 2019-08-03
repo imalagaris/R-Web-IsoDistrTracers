@@ -1,7 +1,7 @@
-docHead <- tags$head(includeCSS("../www/mystyle.css"))
 
 Main_Table <- with(tags,
-    table(class = "MainTable",
+    div(class = "MainTable",
+    table(
         tr(th(""),
             td("unlabeled"),
             td("labeled"),
@@ -35,7 +35,7 @@ Main_Table <- with(tags,
             td(""),
             td(""))
     )
-)
+))
 
 options <- with(
     tags,
@@ -69,24 +69,44 @@ MainPanel.Plot <- tags$div(
 )
 
 ui <- fluidPage(
-    docHead,
-    titlePanel("Isotopic distribution of tracer molecules"),
-    sidebarLayout(
+    HeadCss("../www/mystyle.css"),
+    ShinyHeader("Isotopic Distribution of Tracers"),
+    fluidRow(
+        column(12,
+            with(tags,
+                div(
+                    class = "MainText",
+                    p(aek), p(p2), br(),
+                    includeHTML("../www/dist.html")
 
-        sidebarPanel(
-            h3("Select type and number of atoms"),
-            Main_Table,
-            hr(),
-            h4("Options"),
-            options,
-            actionButton(inputId = "go", label = "update")
-        ), # end sidebarPanel
+                )
+            )
+        )
+    ),
+    fluidRow(
+        column(2,
+            with(tags,
+                p(b("Just in Case!"), br(), "I need it later.")
+            )
+        ),
 
-        mainPanel(
-            tabsetPanel(type = "tabs",
-                tabPanel("Table", MainPanel.conditionalPanel),
-                tabPanel("Plot", MainPanel.Plot )
+            column(width = 3,
+                tags$div(class ="MiddleContent",
+                h3("Select type and number of atoms"),
+                Main_Table,
+                hr(),
+                h4("Options"),
+                options,
+                actionButton(inputId = "go", label = "update")
+            )), # end sidebarPanel
+
+            column(width = 6,
+                tabsetPanel(type = "tabs",
+                    tabPanel("Table", MainPanel.conditionalPanel),
+                    tabPanel("Plot", MainPanel.Plot )
+                ) # end fluidRow
             ) # end fluidRow
-        ) # end fluidRow
+        )
     ) # sidebarLayout
-) # end fluidPage
+ # end fluidPage
+

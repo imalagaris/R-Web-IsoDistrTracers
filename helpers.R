@@ -3,6 +3,36 @@ isotope <- readRDS(file = "./data/isotope.RDS")
 dat <- readRDS(file = "./data/dat.RDS")
 dat_wt <- dat[dat$atoms != "", c("atoms", "weight")]
 
+HeadCss <- function(path) {
+    tags$head(includeCSS(path))
+}
+
+ShinyHeader <- function(Title) {
+    fluidRow(
+        column(12, tags$div(id = "MainTitle", h1(Title)))
+    )
+}
+
+SidePanes <- function(HtmlElement) {
+    column(2, with(tags, HtmlElement))
+}
+
+
+
+
+numInput = function(inputId, value, max, min = 0, step = NA, label = NULL, width = NULL) {
+    allArgs = formals(numInput)
+    thisCall = as.list(match.call())[-1]
+    allArgs[names(thisCall)] <-  thisCall
+    do.call(numericInput, allArgs)
+}
+
+
+
+
+
+
+
 chemDF <- data.frame(
     "atoms" = c("C", "C", "H", "H", "N", "N", "O", "Si", "Fe", "S"),
     "supscr" = c("{^{13}","", "{^{2}", "", "{^{15}", "", "", "", "", ""),
@@ -38,17 +68,12 @@ extract_atoms <- function(input, type = "unlabeled") {
         out[["C"]] = unlist(out[c("C1", "C2")], use.names = F) * c(1, 0.01)
         out[["H"]] = unlist(out[c("H1", "H2")], use.names = F) * c(1, 0.01)
         out[["N"]] = unlist(out[c("N1", "N2")], use.names = F) * c(1, 0.01)
-       out = out[c("C", "H", "N")]
+        out = out[c("C", "H", "N")]
     }
     return(sub_iso_list(out))
 }
 
-numInput = function(inputId, value, max, min = 0, step = NA, label = NULL, width = NULL) {
-    allArgs = formals(numInput)
-    thisCall = as.list(match.call())[-1]
-    allArgs[names(thisCall)] <-  thisCall
-    do.call(numericInput, allArgs)
-}
+
 
 prepareDataChemFormula <- function(arguments, tracers) {
     nn_arg      <- names(arguments)
