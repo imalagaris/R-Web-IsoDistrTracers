@@ -1,10 +1,10 @@
 library(shiny)
-isotope <- readRDS(file = "~/Google Drive/R/shiny/thesis/data/isotope.RDS")
-dat <- readRDS(file = "~/Google Drive/R/shiny/thesis/data/dat.RDS")
+isotope <- readRDS(file = "./data/isotope.RDS")
+dat <- readRDS(file = "./data/dat.RDS")
 dat_wt <- dat[dat$atoms != "", c("atoms", "weight")]
 
 chemDF <- data.frame(
-    "atoms" = c("C", "C", "H", "H", "N", "N", "O", "Si", "Fe", "S"), 
+    "atoms" = c("C", "C", "H", "H", "N", "N", "O", "Si", "Fe", "S"),
     "supscr" = c("{^{13}","", "{^{2}", "", "{^{15}", "", "", "", "", ""),
     "type" = c(1, 1, 2, 2, 3, 3, 4, 5, 6, 7),
     "ind_tr" = c(1, 2, 1, 2, 1, 2, 2, 2, 2, 2))
@@ -17,7 +17,7 @@ atoms[["unlabeled"]] = c(
     "O"  = "oxygen",
     "Si" = "silicon",
     "Fe" = "iron",
-    "S"  = "sulfur" 
+    "S"  = "sulfur"
 )
 atoms[["labeled"]] = c(
     "C1" = "carbon1",
@@ -35,10 +35,10 @@ extract_atoms <- function(input, type = "unlabeled") {
         out[[nam]] = input[[tmp[nam]]]
     }
     if (type == "labeled") {
-        out[["C"]] = unlist(out[c("C1", "C2")], use.names = F)
-        out[["H"]] = unlist(out[c("H1", "H2")], use.names = F)
-        out[["N"]] = unlist(out[c("N1", "N2")], use.names = F)
-        out = out[c("C", "H", "N")]
+        out[["C"]] = unlist(out[c("C1", "C2")], use.names = F) * c(1, 0.01)
+        out[["H"]] = unlist(out[c("H1", "H2")], use.names = F) * c(1, 0.01)
+        out[["N"]] = unlist(out[c("N1", "N2")], use.names = F) * c(1, 0.01)
+       out = out[c("C", "H", "N")]
     }
     return(sub_iso_list(out))
 }
@@ -49,7 +49,6 @@ numInput = function(inputId, value, max, min = 0, step = NA, label = NULL, width
     allArgs[names(thisCall)] <-  thisCall
     do.call(numericInput, allArgs)
 }
-
 
 prepareDataChemFormula <- function(arguments, tracers) {
     nn_arg      <- names(arguments)
@@ -80,7 +79,6 @@ createChemString <- function(data) {
     }
     paste0("$$", paste0(data[["chemm"]], collapse = ''), "$$", collapse = '')
 }
-
 
 image_size <- function(x) {
     if (x < 5) {
@@ -120,7 +118,7 @@ fft_unit <- function(x, n_atoms) {
 }
 
 myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
-    
+
     tracers_exist <- !is.null(tracers)
     if (tracers_exist) {
         nn_tracer <- names(tracers)
@@ -138,7 +136,7 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
         prob_tracer <- NULL
         base_wt_tracer <- NULL
     }
-    
+
     arguments_exist <- !is.null(arguments)
     if (arguments_exist) {
         nn_unlab <- names(arguments)
@@ -161,10 +159,10 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
         probs_unlab <- NULL
         base_wt <- NULL
     }
-    
+
     probs <- c(probs_unlab, prob_tracer)
     base_wt <- sum(c(base_wt, base_wt_tracer))
-    
+
     list_len <- length(probs)
     # if (length(probs) == 1) return(probs[[1]])
     list_len <- length(probs)
@@ -196,8 +194,8 @@ myfft1 <- function(arguments, tracers = NULL, detect_limit = 0.1 * 10^-2) {
     final[final[,2] < 3e-16, 2] <- 0
     highest_peak <- max(final[, 2])
     limit <- highest_peak * detect_limit
-    index_min <- min(which(final[, 2] > limit))  
-    index_max <- max(which(final[, 2] > limit))  
+    index_min <- min(which(final[, 2] > limit))
+    index_max <- max(which(final[, 2] > limit))
     index <- index_min:index_max
     final <- final[index, , drop = FALSE]
     Normalized <- final[, 2] / max(final[, 2]) * 100

@@ -1,0 +1,67 @@
+.OutPutClass {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.MainTable {
+    font-size: 120%;
+    border-top: 5px double;
+}
+
+table {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.MainTable input {
+    padding-left: 4%;
+    height: 90%;
+    width: 100%;
+}
+
+.MainTable th {
+    margin: 0px;
+}
+
+.MainTable td {
+    padding-left: 3%;
+    padding-right: 3%;
+    font-size: 80%;
+
+}
+
+.OptionsTable input {
+    padding-left: 4%;
+    height: 70%;
+    width: 60%;
+}
+
+.OptionsTable td {
+    padding-left: 15%;
+}
+
+.form-group {
+    margin-bottom: 0px;
+}
+
+.well {
+    background-color: #FFDAB9;
+}
+.form-control {
+    padding: 0px;
+    line-height: auto;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #000000;
+    text-align: center;
+}
+
+hr {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 3px;
+}
+
