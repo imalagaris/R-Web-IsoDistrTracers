@@ -15,7 +15,7 @@ server <- function(input, output) {
 
     decimals <- eventReactive(input$go, {input$digits})
     detect   <- eventReactive(input$go, {input$detect_lim * 10^-2})
-    isotope_table <- reactive({myfft1(arguments(), tracers(), detect())})
+    isotope_table <- reactive({myfft(arguments(), tracers(), detect())})
 
     output$stats <- renderTable({isotope_table()},
         digits =  decimals,
