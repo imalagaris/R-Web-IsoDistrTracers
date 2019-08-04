@@ -10,7 +10,7 @@ and mortality. Skeletal muscle serves as a protein depot to buffer plasma amino 
 concentrations due to heightened demand for acute phase protein synthesis and wound
 healing.
 
-To meet protein requirements of burn patients, protein intake of $`1.5\-3.0\ g·kg^{-1}·day^{-1}`$
+To meet protein requirements of burn patients, protein intake of $`1.5-3.0 gkg^{-1}day^{-1}`$
 is recommended while higher intake should be avoided since evidence suggest that do not
 provide additional benefit and may be harmful. However, the current upper limits are based
 on the findings of only two clinical studies.  Those studies had several methodological
