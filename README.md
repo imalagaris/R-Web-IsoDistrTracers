@@ -287,7 +287,7 @@ $$f_Z(z) = \int_{-\infty}^{\infty}f_X(w)f_Y(z-w)dw$$
 ___
 **Theorem**  
 If X and Y are independent and  
-$X \sim N(\mu_X,\sigma_X^2)$ and  
+$`X \sim N(\mu_X,\sigma_X^2)`$ and  
 $Y \sim N(\mu_Y,\sigma_Y^2)$ then  
 $$X + Y \sim N(\mu_X + \mu_Y, \sigma_X^2 + \sigma_Y^2)$$
 <br> </br>
