@@ -8,7 +8,7 @@ abnormalities and arguably the most detrimental is excessive muscle wasting.  Bu
 muscle catabolism leads to reduced strength, delayed rehabilitation, increased morbidity
 and mortality. Skeletal muscle serves as a protein depot to buffer plasma amino acid
 concentrations due to heightened demand for acute phase protein synthesis and wound
-healing. $`\sqrt{2}`$
+healing. $\sqrt{2}$
 
 To meet protein requirements of burn patients, protein intake of 1.5-3.0 g·kg<sup>-1</sup>·day<sup>-1</sup>
 is recommended while higher intake should be avoided since evidence suggest that do not
