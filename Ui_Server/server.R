@@ -6,7 +6,7 @@ server <- function(input, output) {
     tracers <- eventReactive(input$go, {
         extract_atoms(input, "labeled")
     })
-
+    output$Test <- renderPrint(tracers())
     output$chemical_formula <- renderUI({
         temp <-  prepareDataChemFormula(arguments(), tracers())
         chem <- createChemString(temp)
@@ -15,13 +15,14 @@ server <- function(input, output) {
 
     decimals <- eventReactive(input$go, {input$digits})
     detect   <- eventReactive(input$go, {input$detect_lim * 10^-2})
-    isotope_table <- reactive({myfft(arguments(), tracers(), detect())})
+    # isotope_table <- reactive({myfft(arguments(), tracers(), detect())})
+    isotope_table <- reactive(wrapperClass$new(arguments(), tracers())$result)
 
     output$stats <- renderTable({isotope_table()},
         digits =  decimals,
         rownames = TRUE,
         spacing = "xs",
-        display = c("s", "d", "f", "f"))
+        display = c("s", "f", "f", "f"))
 
     output$download <- downloadHandler(
         filename = "isotope_table.txt",
@@ -44,10 +45,11 @@ server <- function(input, output) {
 
         png(outfile, width = ww, height = hh)
         par(mar = c(5, 8, 2, 6))
-        plot(isotope_table()[, 2], yaxt = "n", ylab = "", bty = "n",
+        plot(isotope_table()[,1], isotope_table()[, 2], yaxt = "n", ylab = "", bty = "n",
             type = "h",
-            xaxt = "n", xlab = "", lwd = 2)
-        axis(1, at = 1:nrow(isotope_table()), labels = row.names(isotope_table()))
+            # xaxt = "n",
+            xlab = "", lwd = 2)
+        # axis(1, at = 1:nrow(isotope_table()), labels = row.names(isotope_table()))
         axis(2, las = 1,  cex.axis = 1.5)
         mtext(text = "Probability", side = 2, line = 5, cex = 2, font = 2)
         par(new = TRUE)
