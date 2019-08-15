@@ -1,4 +1,3 @@
-#require(R6)
 ProbableRange <- R6Class(
     classname = "ProbableRange",
     public = list(
@@ -6,14 +5,6 @@ ProbableRange <- R6Class(
         lowLim = 1e-8,
         minIndex = NULL,
         maxIndex = NULL,
-        setLim = function(lowLim = 1e-8, highLim = 1e-6) {
-            ProbableRange$public_fields$lowLim = lowLim
-            ProbableRange$public_fields$highLim = highLim
-        },
-        resetLim = function() {
-            ProbableRange$public_fields$lowLim = 1e-8
-            ProbableRange$public_fields$highLim = 1e-6
-        },
         initialize = function(n, p) {
             private$p <- p
             private$n <- as.integer(n)
@@ -78,16 +69,24 @@ ProbableRange <- R6Class(
         },
         getMin = function() {
             private$getMiddle()
-            if (private$exitOn1()) return(private$middle)
+            if (private$exitOn1()) {
+                return(private$middle)
+            }
             private$getIntervalMin()
-            if (private$exitOn2()) return(private$on2Low())
+            if (private$exitOn2()) {
+                return(private$on2Low())
+            }
             private$getMin()
         },
         getMax = function() {
             private$getMiddle()
-            if (private$exitOn1()) return(private$middle)
+            if (private$exitOn1()) {
+                return(private$middle)
+            }
             private$getIntervalMax()
-            if (private$exitOn2()) return(private$on2High())
+            if (private$exitOn2()) {
+                return(private$on2High())
+            }
             private$getMax()
         }
     )
@@ -98,14 +97,14 @@ ProbableVec <- R6Class(
     inherit = ProbableRange,
     public = list(
         initialize = function(vec, peak = NULL) {
-            self$highLim = 1e-6
-            self$lowLim = 1e-8
+            self$highLim <- 1e-6
+            self$lowLim <- 1e-8
             if (is.null(peak)) {
                 private$mu <- which.max(vec)
             } else {
-                private$mu = as.integer(peak)
+                private$mu <- as.integer(peak)
             }
-            private$vec = vec
+            private$vec <- vec
             private$n <- length(vec)
         },
         getLow = function() {
@@ -125,7 +124,7 @@ ProbableVec <- R6Class(
                 "low" = self$minIndex - 1L,
                 "high" = self$maxIndex - 1L,
                 "vec" = private$vec[seq(self$minIndex, self$maxIndex)]
-                )
+            )
         }
     ),
     private = list(
@@ -150,4 +149,3 @@ ProbableVec <- R6Class(
         }
     )
 )
-

@@ -87,7 +87,9 @@ AtomData <- R6Class(
             if (self$n == 1L) {
                 self$p <- private$setNms(self$prob)
                 self[["len"]] <- self[["type"]]
-            } else { private$atomGroupDist() }
+            } else {
+                private$atomGroupDist()
+            }
         }
     )
 )
@@ -96,7 +98,7 @@ AtomDataType3 <- R6Class(
     inherit = AtomData,
     public = list(
         findIndex = function(id, allow = 1e-7) {
-            low = qbinom(allow, self$n, self$prob[id])
+            low <- qbinom(allow, self$n, self$prob[id])
             high <- qbinom(1 - allow, self$n, self$prob[id])
             c(low, high)
         },
@@ -109,7 +111,7 @@ AtomDataType3 <- R6Class(
             high <- ranges[2L, ]
             blocks <- blockparts(high - low, self$n - sum(low))
             blocks <- sweep(blocks, 1L, low, `+`)
-            type <- as.integer(colSums(blocks[-1,] * c(1L, 2L)))
+            type <- as.integer(colSums(blocks[-1, ] * c(1L, 2L)))
             p <- apply(blocks, 2L, dmultinom, self$n, self$prob)
             pNorm <- tapply(p, type, function(x) x / sum(x))
             wt <- split(t(self$mass) %*% blocks, type)
@@ -159,7 +161,7 @@ atomDataList <- R6Class(
                 tmp <- as.list(private$List[[el]])
                 tmp[["type"]] <- tmp[["type"]][[1L]]
                 if (tmp[["type"]] == 2L) {
-                self[["atoms"]][[el]] <- AtomData$new(tmp, n[[el]], purity[[el]])
+                    self[["atoms"]][[el]] <- AtomData$new(tmp, n[[el]], purity[[el]])
                 } else {
                     self[["atoms"]][[el]] <- AtomDataType3$new(tmp, n[[el]], purity[[el]])
                 }
@@ -170,11 +172,3 @@ atomDataList <- R6Class(
         List = list()
     )
 )
-# at <- c("C", "H", "N", "O", "Si")
-# num <- c(17, 30, 1, 2, 2000)
-# a <- atomDataList$new(at, num)
-
-
-
-
-

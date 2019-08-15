@@ -1,8 +1,3 @@
-#require(R6)
-#require(partitions)
-#source("Rscripts/probableRangeClasses.R")
-#source("Rscripts/atomClasses.R")
-
 MolData <- R6Class(
     classname = "MolData",
     inherit = atomDataList,
@@ -142,53 +137,3 @@ wrapperClass <- R6Class(
     )
 )
 
-#at <- c("C", "H", "N", "O")
-#num <- c(400, 400, 400, 400)
-#a <- MolData$new()$importTracee(at, num)
-#a$computeFinal()$result
-
-
-#
-# dict = setNames(
-#     c("Weight",
-#       "Final Length",
-#       "Atom Group Distribution",
-#       "Number of Atoms",
-#       "Atom Abundace",
-#       "Highest Peak",
-#       "Excess Neutrons",
-#       "Excess Mass",
-#       "Mass",
-#       "Integer Mass",
-#       "Number of Isotopic Species"
-#     ), c(
-#         "wt",
-#         "len",
-#         "p",
-#         "n",
-#         "prob",
-#         "peak",
-#         "neuEx",
-#         "massEx",
-#         "mass",
-#         "int_mass",
-#         "type"
-#     )
-
-
-# print = function(...) {
-#     div <- rep("-", 50)
-#     for (el in self$elem) {
-#         cat("\n", div, "\nAtom: ", el, "\n\n")
-#         for (nam in names(self$mol[[el]])) {
-#             tmp <- self$mol[[el]][[nam]]
-#             type <- class(tmp)
-#             cond <- type != "function" && type != "environment" && !is.null(tmp)
-#             if (cond) {
-#                 cat(private$dict[nam], "\n")
-#                 print(tmp)
-#                 cat("\n")
-#             }
-#         }
-#     }
-# },
