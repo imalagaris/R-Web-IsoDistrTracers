@@ -24,3 +24,22 @@ atoms[["labeled"]] <- c(
     "N1" = "nitrogen1",
     "N2" = "nitrogen2"
 )
+
+allowedRange <- list()
+allowedRange[["unlabeled"]] <- list(
+    "C" = c("low"= 0, "high" = 400),
+    "H" = c("low"= 0, "high" = 400),
+    "N" = c("low"= 0, "high" = 400),
+    "O" = c("low"= 0, "high" = 400),
+    "Si" = c("low"= 0, "high" = 5),
+    "Fe" = c("low"= 0, "high" = 4),
+    "S" = c("low"= 0, "high" = 8)
+)
+allowedRange[["labeled"]] <- list(
+    "C1" = c("low"= 0, "high" = 10),
+    "C2" = c("low"= 0, "high" = 100),
+    "H1" = c("low"= 0, "high" = 10),
+    "H2" = c("low"= 0, "high" = 100),
+    "N1" = c("low"= 0, "high" = 10),
+    "N2" = c("low"= 0, "high" = 100)
+)

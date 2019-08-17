@@ -28,8 +28,12 @@ sub_iso_list <- function(alist) {
 extract_atoms <- function(input, type = "unlabeled") {
     out <- list()
     tmp <- atoms[[type]]
+    tmp1 <- allowedRange[[type]]
     for (nam in names(tmp)) {
-        out[[nam]] <- input[[tmp[nam]]]
+        x <- input[[tmp[nam]]]
+        low <- tmp1[[nam]][["low"]]
+        high <- tmp1[[nam]][["high"]]
+        out[[nam]] <- if (x < low) low else if (x > high) high else x
     }
     if (type == "labeled") {
         out[["C"]] <- unlist(out[c("C1", "C2")], use.names = F) * c(1, 0.01)

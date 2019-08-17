@@ -29,14 +29,9 @@ MolData <- R6Class(
             }
             vec <- Reduce(`*`, vec) / len
             vec <- Re(fft(vec, inverse = TRUE))
-            vec <- private$setNms(vec, len)
-            obj <- ProbableVec$new(vec)$low2HighVec()
-            self$p <- obj$vec[obj$vec > 1e-6]
+            self$p <- private$setNms(vec, len)
+            self$reduceProbVec(1e-5)
             self$pNorm <- self$p / max(self$p) * 100
-            self$resetLen()
-            self$low <- as.integer(names(self$p)[1L])
-            self$high <- self$low + self$len - 1L
-
         },
         mergeAtoms = function() {
             if (is.null(self$tracee)) {
@@ -57,15 +52,25 @@ MolData <- R6Class(
                 self$mol[[el]]$reduceProbVec()
                 self$mol[[el]]$resetLen()
             }
+            invisible(self)
         },
         getGroupWts = function() {
             for (el in self$elem) {
                 self$mol[[el]]$getWt()
-                index <- names(self$mol[[el]]$p)
-                self$mol[[el]]$wt <- self$mol[[el]]$wt[index]
+                id <- intersect(names(self$mol[[el]]$wt), names(self$mol[[el]]$p))
+                self$mol[[el]]$wt <- self$mol[[el]]$wt[id]
+                self$mol[[el]]$p <- self$mol[[el]]$p[id]
+                self$mol[[el]]$resetLen()
+            }
+            invisible(self)
+        },
+        adjustVecs = function() {
+            for (el in self$elem) {
+                self$mol[[el]]$adjustVec()
             }
         },
         getMolWeight = function() {
+            self$adjustVecs()
             low <- unlist(lapply(self$mol, `[[`, "low"), use.names = TRUE)
             high <- unlist(lapply(self$mol, `[[`, "high"), use.names = TRUE)
 
@@ -88,10 +93,12 @@ MolData <- R6Class(
             }
             self$probsTest <- unlist(pTest)
             self$wt <- unlist(wts)
+            invisible(self)
         },
-        getResult = function(dig = 5) {
-            self$result <- cbind(self$wt, round(self$p, dig), round(self$pNorm, dig - 2))
+        getResult = function() {
+            self$result <- cbind(self$wt, self$p, self$pNorm)
             colnames(self$result) <- c("Weight", "Probability", "Normalized")
+            invisible(self)
         },
         computeFinal = function() {
             self$mergeAtoms()

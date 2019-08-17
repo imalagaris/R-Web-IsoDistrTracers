@@ -1,95 +1,36 @@
-/*
-.MainContainer {
-    margin-left: 15%;
-    margin-right: 15%;
-}
-*/
-h1 {
-    font-size: 200%;
-    font-weight: bold;
-}
-
-h2, h3, h4, h5 {
-    font-weight: bold;
-}
-p, ol, ul {
-    text-align: justify;
-    font-size: 18px;
-}
 div#MainTitle {
     display: flex;
     justify-content: center;
     font-size: 150%;
+    font-weight: bold;
     margin: 1%;
 }
-
-.MainText {
-    width: 800px;
-    margin-left:auto;
-    margin-right:auto;
+div#stats {
+    display: flex;
+    justify-content: center;
+}
+div#DistributionPlot {
+    display: flex;
+    justify-content: center;
+}
+div#DistributionPlot img {
+    width: 120%;
+    height: 120%;
+    object-fit: contain;
 }
 
-.MiddleContent {
-    background-color: #FFDAB9;
-    padding: 3%;
+div.MathJax_Display {
+    margin-top: 10px;
 }
 
-.OutPutClass {
-    margin-left: 25%;
-    margin-right: 25%;
+input#digits {
+    width: 70px;
 }
-
-.MainTable table {
-    font-size: 120%;
-    max-width: 400px;
-    margin-left: 15%;
-    margin-right: 15%;
+input#detect_lim {
+    width: 70px;
 }
-
-.MainTable input {
-    padding-left: 4%;
-    height: 90%;
-    width: 100%;
-}
-
-.MainTable th {
-    margin: 0px;
-}
-
-.MainTable td {
-    margin-left: 5%;
-    padding-right: 5%;
-    padding-left: 3%;
-    margin-right: 3%;
-    font-size: 80%;
-
-}
-
-.OptionsTable table {
-    margin-left: 15%;
-    margin-right: 15%;
-}
-
-.OptionsTable input {
-    padding-left: 4%;
-    height: 70%;
-    width: 60%;
-}
-
-.OptionsTable td {
-    margin-left: 10%;
-    padding-left: 5%;
-}
-
-td {
-    max-width: 80px;
-}
-.form-group {
-    margin-bottom: 0px;
-}
-
 .form-control {
-    margin: 2%;
+    margin: 2px;
     padding: 0px;
     line-height: auto;
     color: #555;
@@ -97,7 +38,60 @@ td {
     border: 1px solid #000000;
     text-align: center;
 }
+div.form-group.shiny-input-container {
+    width: 90%;
+    min-width: 30px;
+    max-width: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+}
 
+.MainTable {
+    display: flex;
+    justify-content: center;
+}
+.MainTable input {
+    padding-left: 4%;
+    height: 90%;
+    width: 100%;
+}
+.MainTable td {
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+
+}
+.MainText {
+    width: 800px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.MiddleContent {
+    font-family: "Consolas";
+    width: 300px;
+    background-color: #FFDAB9;
+    padding: 2%;
+}
+.OptionsTable input {
+    padding-left: 2px;
+    height: 90%;
+    width: 100%;
+}
+.OptionsTable td {
+    margin-left: 10%;
+    padding-left: 5%;
+}
+.OutPutClass {
+    font-family: "Consolas";
+    justify-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.shiny-input-container:not(.shiny-input-container-inline) {
+    margin: 0px;
+    padding: 0px;
+}
 hr {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
@@ -106,5 +100,12 @@ hr {
     border-style: inset;
     border-width: 3px;
 }
-
-
+h1, h2, h3, h4, h5 {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+p, ol, ul {
+    text-align: justify;
+    font-size: 18px;
+}

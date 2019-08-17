@@ -3,7 +3,7 @@ IsotopeData <- R6Class(
     classname = "IsotopeData",
     public = list(
         List = NULL,
-        filepath = "../data/new_iso3.RDS",
+        filepath = "../data/iso4.RDS",
         keepThem = c("type", "int_mass", "mass", "neuEx", "massEx", "prob"),
         initialize = function() {
             dat <- readRDS(self$filepath)
@@ -40,13 +40,22 @@ AtomData <- R6Class(
         resetLen = function() {
             self$len <- length(self$p)
         },
-        reduceProbVec = function() {
-            self$p <- self$p[which(self$p > 1e-7)]
+        reduceProbVec = function(cutoff = 1e-6) {
+            id <- which(self$p > cutoff)
+            self$p <- self$p[min(id):max(id)]
             self$low <- as.integer(names(self$p)[1])
             self$high <- as.integer(names(self$p)[length(self$p)])
             self$resetLen()
         },
-        findIndex = function(id, allow = 1e-7) {
+        adjustVec = function() {
+            tmp <- private$setNms(numeric(self$high + 1L))
+            id <- names(self$p)
+            tmp[id] <- self$p
+            self$p <- tmp
+            tmp[id] <- self$wt
+            self$wt <- tmp
+        },
+        findIndex = function(id, allow = 1e-6) {
             qbinom(1 - allow, self$n, self$prob[id])
         },
         getWt = function() {
@@ -57,14 +66,16 @@ AtomData <- R6Class(
             self$wt <- setNames(wt, nams)
         },
         initialize = function(List, n, purity = NULL) {
+            nams <- as.character(List$neuEx)
             for (nn in names(List)) {
-                self[[nn]] <- List[[nn]]
+                self[[nn]] <- setNames(List[[nn]], nams)
             }
             if (!is.null(purity)) {
-                self[["prob"]] <- c(1 - purity, purity)
+                self$prob <- c("0" = 1 - purity, "1" = purity)
             }
-            self[["n"]] <- n
-            self[["peak"]] <- ceiling(sum(self[["prob"]] * self[["neuEx"]] * n))
+            self$n <- n
+            self$peak<- ceiling(sum(self$prob * self$neuEx * n))
+            self$type <- self$type[[1L]]
             private$fft_unit()
         }
     ),
@@ -75,7 +86,12 @@ AtomData <- R6Class(
             setNames(vec, nam)
         },
         find_index = function(vec, peak) {
+            if (length(vec) < 15L) {
+                id <- max(which(vec > 1e-6))
+                return(vec[seq(id)])
+            } else {
             ProbableVec$new(vec, peak)$one2HighVec()
+            }
         },
         atomGroupDist = function() {
             k <- self$findIndex(2L)
@@ -84,12 +100,12 @@ AtomData <- R6Class(
             self[["len"]] <- k + 1L
         },
         fft_unit = function() {
-            if (self$n == 1L) {
-                self$p <- private$setNms(self$prob)
-                self[["len"]] <- self[["type"]]
-            } else {
+            # if (self$n == 1L) {
+            #     self$p <- private$setNms(self$prob)
+            #     self[["len"]] <- self[["type"]]
+            # } else {
                 private$atomGroupDist()
-            }
+            # }
         }
     )
 )
@@ -97,22 +113,23 @@ AtomDataType3 <- R6Class(
     classname = "AtomDataType3",
     inherit = AtomData,
     public = list(
-        findIndex = function(id, allow = 1e-7) {
+        findIndex = function(id, allow = 1e-6) {
             low <- qbinom(allow, self$n, self$prob[id])
             high <- qbinom(1 - allow, self$n, self$prob[id])
             c(low, high)
         },
         getWt = function() {
-            ranges <- matrix(0L, nrow = 2L, ncol = 3L)
-            for (i in seq(3L)) {
-                ranges[, i] <- self$findIndex(i)
+            ranges <- matrix(0L, nrow = 2L, ncol = length(self$neuEx))
+            colnames(ranges) <- names(self$neuEx)
+            for (neutron in names(self$neuEx)) {
+                ranges[, neutron] <- self$findIndex(neutron)
             }
             low <- ranges[1L, ]
             high <- ranges[2L, ]
             blocks <- blockparts(high - low, self$n - sum(low))
             blocks <- sweep(blocks, 1L, low, `+`)
-            type <- as.integer(colSums(blocks[-1, ] * c(1L, 2L)))
-            p <- apply(blocks, 2L, dmultinom, self$n, self$prob)
+            type <- as.integer(colSums(blocks[-1L, ] * self$neuEx[-1L]))
+            p <- apply(blocks, 2L, dmultinom, self$n, self$prob[names(self$neuEx)])
             pNorm <- tapply(p, type, function(x) x / sum(x))
             wt <- split(t(self$mass) %*% blocks, type)
             out <- setNames(vector("list", length(wt)), names(wt))
@@ -124,9 +141,13 @@ AtomDataType3 <- R6Class(
     ),
     private = list(
         findVecLength = function() {
-            super$findIndex(2L, 1e-6) + 2L * super$findIndex(3L, 1e-6)
+            tmp <- lapply(names(self$neuEx), function(x) super$findIndex(x, 1e-5) * self$neuEx[x])
+            Reduce("+", tmp)
         },
         atomGroupDist = function() {
+            prob <- private$setNms(numeric(self$type))
+            prob[names(self$prob)] <- self$prob
+            self$prob <- prob
             len <- private$findVecLength()
             out <- numeric(len)
             out[seq.int(self$type)] <- self$prob
@@ -159,8 +180,7 @@ atomDataList <- R6Class(
             self[["atoms"]] <- setNames(vector("list", self$nElem), elem)
             for (el in elem) {
                 tmp <- as.list(private$List[[el]])
-                tmp[["type"]] <- tmp[["type"]][[1L]]
-                if (tmp[["type"]] == 2L) {
+                if (tmp[["type"]][[1L]] == 2L) {
                     self[["atoms"]][[el]] <- AtomData$new(tmp, n[[el]], purity[[el]])
                 } else {
                     self[["atoms"]][[el]] <- AtomDataType3$new(tmp, n[[el]], purity[[el]])

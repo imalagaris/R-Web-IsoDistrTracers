@@ -8,13 +8,6 @@ and mortality. Skeletal muscle serves as a protein depot to buffer plasma amino 
 concentrations due to heightened demand for acute phase protein synthesis and wound
 healing.
 
-To meet protein requirements of burn patients, protein intake of $1.5\-3.0\ g·kg^{-1}·day^{-1}$
-is recommended while higher intake should be avoided since evidence suggest that do not
-provide additional benefit and may be harmful. However, the current upper limits are based
-on the findings of only two clinical studies.  Those studies had several methodological
-limitations, and the findings were not definitive. Therefore, the potential beneficial
-effect of higher than currently recommended protein intake is understudied.
-
 Assessment of muscle wasting requires the accurate evaluation of the protein synthesis and
 breakdown. Measurement of protein kinetics are optimal for mechanistic investigations on
 the molecular mechanism of muscle wasting and for evaluating the acute effect on protein
@@ -45,22 +38,6 @@ patient samples by:
 2. Modeling the observed mass spectrum, using the statistical properties of the mass
    distribution of tracee and tracer.
 
-**Aim 2:** To determine the effect of dietary intake on muscle protein kinetics in
-severely burned children by:
-
-1. Retrospectively assess the effect of varying levels of protein intake on muscle protein
-   kinetics in a group of patients studied while receiving protein intake at levels
-   routinely administered in normal clinical conditions.
-2. Assessing the impact of applying the method in Aim 1 for the estimation of protein
-   kinetics, on the interpretation of the results.
-
-The retrospective analysis of multitude of protein kinetics data is an excellent
-opportunity for a cost-effective investigation of the understudied effect of protein
-intake on severe burns. Given the scarcity of relevant data in the literature and the
-tremendous debilitating effect of burn induced muscle catabolism it is likely that the
-findings of this analysis will be of high clinical interest and a significant addition to
-the existing literature.
-
 ## 2. Specific Aims
 
 **Aim 1:** Increase the precision of mass spectrometry isotope enrichment estimation of
@@ -73,31 +50,6 @@ patient samples by:
   * The methods used for calculation of enrichment for mass spectrometry reading do not take
 into account the statistical properties of the mass distributions of tracee and tracers. 
 Using this additional information is expected increase precision in enrichment estimation. 
-
-**Aim 2:** To determine the effect of dietary intake on muscle protein kinetics in severely
-burned children by:
-
-1. Retrospectively assess the effect of varying levels of protein
-intake on muscle protein kinetics in a group of patients studied while receiving protein
-intake at levels routinely administered in normal clinical conditions. 
-  * Enteral feeding was not under experimental control and patients were studied during the
-fed state. Thus, we expect protein intake levels among subjects will vary within a range
-that will allow the examination of our hypothesis. The large sample size allows for
-inclusion of covariates in the statistical analysis.
-  * The variability of random differences in protein intake among patients during the study
-period will partly explain the variability of protein kinetics and higher levels of
-protein intake will be positively associated with a lower catabolic state.
-
-2. Assessing the impact of applying the method in Aim 1 for the estimation of protein
-kinetics, on the interpretation of the results.
-  * Kinetic parameters for Aim 2 will be calculated using both the established and the new
-method. In metabolic studies with primed constant tracer infusion protocol (such as
-studies involved in Aim 2), where the steady state enrichment rarely exceeds 7%, the new
-methodology is expected to provide a mild improvement in accuracy of enrichment
-estimation.
-  * Improvement of kinetic parameters estimation in pulse bolus tracer injection metabolic
-studies (such as those performed in SHC- Galveston from 2008 and on) is expected to be
-high and critical to the proper interpretation of the derived kinetic parameters.
 
 
 ## 3. Research Strategy
@@ -133,48 +85,6 @@ either underestimate the effect of labeling on tracer’s mass distribution, lea
 biased estimates, or/and ignore statistical properties of tracee and tracer mass
 distribution leading to increased variability. A method that takes into account both
 factors is expected to <u>improve the accuracy and precision of enrichment estimation</u>.
-
-A major unsolved metabolic problem in burn injury is muscle wasting the loss of protein mass
-and strength of the skeletal muscle. In critical illness, loss of lean mass is associated
-with increased morbidity(4) and mortality(5). For patients with respiratory failure, it
-significantly prolongs the ventilation time and ICU stay(6). Severe burn injury is
-characterized by increased whole body protein turnover and a pronounced increase in muscle
-protein breakdown to a degree that cannot be matched by the concurrent increase in muscle
-protein synthesis, resulting in net loss of muscle mass(7,8).  <u>It appears that in severe
-burns the body sacrifices skeletal muscle to meet the high demand of amino acids necessary
-for wound healing and for production of acute phase proteins</u>(9,10).
-
-To meet the elevated daily protein requirements of burn patients, the evidence-based
-guidelines of the American Burn Association (ABA) recommend protein intake of $1.5-3.0 \ 
-g·kg^{-1}·day^{-1}$ (11). The European Society of Parenteral and Enteral
-Nutrition (ESPEN) recommends intake of $1.5-3\ g·kg^{-1}·day^{-1}$ in burned
-children and $1.5-2\ g·kg^{-1}·day^{-1}$ in burned adults(12). <u>However,
-the ABA and ESPEN recommendations were based on evidence from a handful of studies, of
-which only one was specific to the effect of protein intake on protein kinetics in burn
-injury</u>. Wolfe et al(13) compared the effects of protein intakes of $1.4\
-g·kg^{-1}·day^{-1}$ and $2.2\ g·kg^{-1}·day^{-1}$ over a 3-day
-period on protein metabolism in 6 severely burned adults using a cross-over study design.
-Protein turnover was significantly greater in the high versus low protein regimen but the
-difference between protein synthesis and breakdown was non-significant. Urea production
-rate was elevated only in the high protein regimen, suggesting that additional amount of
-the administered protein was partly excreted. Patterson et al.1997(14) investigated the
-effect of protein intake ranging from $1.15\ g·kg^{-1}·day^{-1}$ to $2.92\
-g·kg^{-1}·day^{-1}$ on protein metabolism of 12 pediatric patients with
-average burn size of 25% of body area. In agreement with the study by Wolfe et al.(13),
-higher protein intake was positively correlated with the urea production rate.  Endogenous
-amino acid rate of appearance, an index of whole-body protein breakdown, was not
-associated with protein intake. However, the study design precluded concurrent measurement
-of whole body protein synthesis and thus net balance; there does not allow for definitive
-conclusions. 
-
-Even though high protein supplementation is an obvious intervention against muscle
-catabolism, <u>the upper limits of the current recommendations are based on the findings of
-only two studies</u>. Apart from small sample sizes, the whole body protein kinetics methods
-employed in those studies provide information only for substrates that appear in the
-plasma pool(15), which is an additional limitation of the current evidence. Even if very
-high protein intake did not provide further improvement in whole body protein kinetics,
-that might not be the case for muscle mass(15).  Therefore, <u>the potential beneficial
-effect of higher than currently recommended protein intake is understudied</u>.
 
 ### *B. Preliminary Studies*
 
@@ -237,7 +147,11 @@ profile of mass spectrum. One abundant fragment of phenylalanine, has the chemic
 $C_{17}H_{30}N_1O_2Si_2$. Using an algorithm
 written in R programming language, the estimated natural isotopic distribution is the
 following.
+
+The corresponding output of GCMS after normalization by setting to 100 the most abundant peak (M0) is shown in the following in Figure1. The chemical formula of this fragment derived from a phenylalanine tracer labeled at six carbon positions is $^{13}C_{ 6 } ^{ 12 }C_{ 11 }H_{ 30 }N_{ 1 }O_{ 2 }Si_{ 2 }$. By assuming the isotopic purity of the tracer at 100% the mass number of the six carbons in the phenylalanine molecule do not follow the binomial distribution mentioned above but are constrained to be $^{ 13 }C$. The estimated mass distribution of this molecule is found in the following table.
 <br></br>
+
+
 ___
 ___
 
