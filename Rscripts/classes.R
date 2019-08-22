@@ -1,4 +1,3 @@
-require(R6)
 IsotopeDat <- R6Class(
     classname = "IsotopeData",
     public = list(
@@ -12,6 +11,7 @@ IsotopeDat <- R6Class(
     )
 )
 
+################################################################################
 atom <- R6Class(
     classname = "atom",
     public = list(
@@ -67,16 +67,18 @@ atom <- R6Class(
     )
 )
 
+################################################################################
 atomList <- R6Class(
     classname = "atomList",
     inherit = atom,
     public = list(
+        List = NULL,
         elem = NULL,
         atoms = NULL,
         baseWt = 0,
         meanWt = 0,
         initialize = function(elem, n, purity = NULL) {
-            private$List <- IsotopeDat$new()$List[elem]
+            self$List <- IsotopeDat$new()$List[elem]
             n <- setNames(as.integer(n), elem)
             self[["elem"]] <- elem
             len <- length(elem)
@@ -84,19 +86,16 @@ atomList <- R6Class(
             names(purity) <- elem
             self[["atoms"]] <- setNames(vector("list", len), elem)
             for (el in elem) {
-                tmp <- as.list(private$List[[el]])
+                tmp <- as.list(self$List[[el]])
                 self[["atoms"]][[el]] <- atom$new(tmp, n[[el]], purity[[el]])
                 self$baseWt <- self$baseWt + self$atoms[[el]]$baseWt
                 self$meanWt <- self$meanWt + self$atoms[[el]]$meanWt
             }
         }
-    ),
-    private = list(
-        List = list()
     )
 )
 
-
+################################################################################
 MolData <- R6Class(
     classname = "MolData",
     inherit = atomList,
@@ -178,6 +177,7 @@ MolData <- R6Class(
     )
 )
 
+################################################################################
 wrapperClass <- R6Class(
     classname = "wrapperClass",
     inherit = MolData,
@@ -199,59 +199,3 @@ wrapperClass <- R6Class(
         }
     )
 )
-
-# at <- c("C", "H", "N", "O", "Si")
-# num <-c(11, 30, 1, 2, 2)
-#
-#
-# a <- MolData$new()$setTracee(at, num)
-# a$setTracer("C", 6, 0.99)
-# a$run()$result
-#
-# defaultPar <- par()
-# do.call(par, defaultPar)
-# par(mar = c(6, 6, 2, 6))
-#
-# plotAxis <- function(alist) {
-#     axisList <- alist[c("side", "las", "cex.axis")]
-#     mTextList <- alist[c("text", "side", "line", "cex", "font")]
-#     do.call(axis, axisList)
-#     do.call(mtext, mTextList)
-# }
-#
-# argList <- list(
-#     x <- NULL,
-#     pch = 1,
-#     yaxt = "n",
-#     xaxt = "n",
-#     xlab = "",
-#     ylab = "",
-#     lwd = 3L,
-#     bty = "n",
-#     type = "h"
-# )
-#
-# axisList <- list(
-#         side = 1L,
-#         las = 1L,
-#         cex.axis = 1.5,
-#         text = "",
-#         line = 4L,
-#         cex = 2,
-#         font = 2L
-# )
-#
-# argList$x <- quote(a$result[, 1:2])
-# do.call(plot, argList)
-#
-# axisList[c("text", "side")] <- list("Peaks", 1)
-# do.call(plotAxis, list(axisList))
-#
-# axisList[c("text", "side")] <- list("Probability", 2)
-# do.call(plotAxis, list(axisList))
-#
-# par(new = TRUE)
-# argList[c("x", "y", "pch", "type")] <- list(quote(a$result[, 3L]),  NULL, "", NULL)
-# axisList[c("text", "side")] <- list("Normalized", 4)
-# do.call(plot, argList)
-# do.call(plotAxis, list(axisList))
