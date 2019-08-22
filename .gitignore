@@ -4,3 +4,8 @@
 .Ruserdata
 IsotopicDistributionTracers.Rproj
 debug.log
+/oldClasses/*
+/data/iso4.RDS
+/data/iso5.RDS
+/data/iso7.RDS
+/data/new_iso3.RDS
